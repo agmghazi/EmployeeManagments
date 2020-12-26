@@ -19,5 +19,11 @@ namespace EmployeeManagments.Controllers
         {
             return _employeeReposiory.GetEmployee(1).Name;
         }
+
+        public JsonResult Details()
+        {
+            Employee employee = _employeeReposiory.GetEmployee(1);
+            return Json(employee);
+        }
     }
 }
