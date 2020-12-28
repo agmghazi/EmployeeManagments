@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace EmployeeManagments.Models
@@ -14,6 +15,6 @@ namespace EmployeeManagments.Models
         public Dept? Department { get; set; }
 
         [Required]
-        public IFormFile Photo { get; set; }
+        public List<IFormFile> Photos { get; set; }
     }
 }
