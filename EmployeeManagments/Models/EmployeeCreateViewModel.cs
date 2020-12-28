@@ -1,12 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Http;
+using System.ComponentModel.DataAnnotations;
 
 namespace EmployeeManagments.Models
 {
-    public class Employee
+    public class EmployeeCreateViewModel
     {
-        public int Id { get; set; }
-        [Required]
-        [MaxLength(50, ErrorMessage = "Name cannot exceed 50 character")]
         public string Name { get; set; }
         [Required]
         [Display(Name = "office Name")]
@@ -15,6 +13,7 @@ namespace EmployeeManagments.Models
         [Required]
         public Dept? Department { get; set; }
 
-        public string PhotoPath { get; set; }
+        [Required]
+        public IFormFile Photo { get; set; }
     }
 }
