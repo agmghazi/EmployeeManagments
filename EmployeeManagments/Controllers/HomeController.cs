@@ -26,7 +26,6 @@ namespace EmployeeManagments.Controllers
 
         public ViewResult Details(int? id)
         {
-            throw  new Exception("error in details");
             Employee employee = _employeeReposiory.GetEmployee(id.Value);
             if (employee ==null)
             {
@@ -45,6 +44,7 @@ namespace EmployeeManagments.Controllers
         [HttpGet]
         public ViewResult Create()
         {
+            throw new Exception("error in details");
 
             return View();
         }
