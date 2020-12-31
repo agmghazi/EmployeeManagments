@@ -1,7 +1,6 @@
 ﻿using EmployeeManagments.Models;
 using EmployeeManagments.ViewModels;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.IO;
@@ -27,7 +26,7 @@ namespace EmployeeManagments.Controllers
         public ViewResult Details(int? id)
         {
             Employee employee = _employeeReposiory.GetEmployee(id.Value);
-            if (employee ==null)
+            if (employee == null)
             {
                 Response.StatusCode = 404;
                 return View("EmployeeNotFound", id.Value);
@@ -44,7 +43,6 @@ namespace EmployeeManagments.Controllers
         [HttpGet]
         public ViewResult Create()
         {
-            throw new Exception("error in details");
 
             return View();
         }
@@ -96,12 +94,12 @@ namespace EmployeeManagments.Controllers
                 employee.Email = model.Email;
                 employee.Department = model.Department;
 
-                if (model.Photo !=null)
+                if (model.Photo != null)
                 {
-                    if (model.ExistingPhotoPath !=null)
+                    if (model.ExistingPhotoPath != null)
                     {
-                       string filePath= Path.Combine(_hostingEnvironment.WebRootPath, "images", model.ExistingPhotoPath);
-                       System.IO.File.Delete(filePath);
+                        string filePath = Path.Combine(_hostingEnvironment.WebRootPath, "images", model.ExistingPhotoPath);
+                        System.IO.File.Delete(filePath);
                     }
                     employee.PhotoPath = ProcessUploadedFile(model);
                 }
@@ -118,15 +116,15 @@ namespace EmployeeManagments.Controllers
         private string ProcessUploadedFile(EmployeeCreateViewModel model)
         {
             string uniqueFileName = null;
-            if (model.Photo != null )
+            if (model.Photo != null)
             {
-                    string uploadFolder = Path.Combine(_hostingEnvironment.WebRootPath, "images");
-                    uniqueFileName = Guid.NewGuid().ToString() + "_" + model.Photo.FileName;
-                    string filePath = Path.Combine(uploadFolder, uniqueFileName);
-                    using (var fileSream = new FileStream(filePath, FileMode.Create))
-                    {
+                string uploadFolder = Path.Combine(_hostingEnvironment.WebRootPath, "images");
+                uniqueFileName = Guid.NewGuid().ToString() + "_" + model.Photo.FileName;
+                string filePath = Path.Combine(uploadFolder, uniqueFileName);
+                using (var fileSream = new FileStream(filePath, FileMode.Create))
+                {
                     model.Photo.CopyTo(fileSream);
-                    }
+                }
             }
 
             return uniqueFileName;
