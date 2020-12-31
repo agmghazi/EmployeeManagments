@@ -1,5 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using EmployeeManagments.Utilities;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 namespace EmployeeManagments.Models
 {
@@ -8,6 +9,8 @@ namespace EmployeeManagments.Models
         [Required]
         [EmailAddress]
         [Remote(action: "IsEmailInUse", controller: "Account")]
+        [ValidEmailDomain(allowedDomain: "gis.com",
+            ErrorMessage = "Email Domain must be gis.com")]
         public string Email { get; set; }
 
         [Required]
