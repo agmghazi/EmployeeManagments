@@ -23,6 +23,18 @@ namespace EmployeeManagments
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("EditPolePolicy", policy =>
+                    policy.RequireClaim("Edit Role"));
+
+                options.AddPolicy("CreatePolePolicy", policy =>
+                    policy.RequireClaim("Create Role"));
+
+                options.AddPolicy("DeletePolePolicy", policy =>
+                    policy.RequireClaim("Delete Role"));
+            });
+
             services.AddDbContextPool<AppDbContext>(options =>
                 options.UseSqlServer(_config.GetConnectionString("EmployeeDBConnection")));
 
