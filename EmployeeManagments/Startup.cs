@@ -1,7 +1,9 @@
 ﻿using EmployeeManagments.Models;
+using EmployeeManagments.Security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -23,16 +25,32 @@ namespace EmployeeManagments
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.AccessDeniedPath = new PathString("/Administraion/AccessDenied");
+            });
+
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("EditPolePolicy", policy =>
-                    policy.RequireClaim("Edit Role"));
+                    policy.AddRequirements(new ManageAdminRolesAndClaimsRequirement()));
+
+                //options.AddPolicy("EditPolePolicy", policy => policy.RequireAssertion(context =>
+                //       context.User.IsInRole("Admin") &&
+                //       context.User.HasClaim(claim => claim.Type == "Edit Role" && claim.Value == "true") ||
+                //       context.User.IsInRole("Super Admin")));
+
+                //options.AddPolicy("EditPolePolicy", policy =>
+                //    policy
+                //        .RequireRole("Admin")
+                //        .RequireClaim("Edit Role", "true")
+                //        .RequireRole("Super Admin"));
 
                 options.AddPolicy("CreatePolePolicy", policy =>
-                    policy.RequireClaim("Create Role"));
+                    policy.RequireClaim("Create Role", "true"));
 
                 options.AddPolicy("DeletePolePolicy", policy =>
-                    policy.RequireClaim("Delete Role"));
+                    policy.RequireClaim("Delete Role", "true"));
             });
 
             services.AddDbContextPool<AppDbContext>(options =>
@@ -55,6 +73,13 @@ namespace EmployeeManagments
             }).AddXmlSerializerFormatters();
 
             services.AddScoped<IEmployeeRepository, SQLEmployeeRepository>();
+
+            // Register the first handler
+            services.AddSingleton<IAuthorizationHandler,
+                CanEditOnlyOtherAdminRolesAndClaimsHandler>();
+            // Register the second handler
+            services.AddSingleton<IAuthorizationHandler, SuperAdminHandler>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
