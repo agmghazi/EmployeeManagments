@@ -80,6 +80,10 @@ namespace EmployeeManagments
                 options.SignIn.RequireConfirmedEmail = true;
                 options.Tokens.EmailConfirmationTokenProvider = "CustomEmailConfirmation";
 
+                //lockout account
+                options.Lockout.MaxFailedAccessAttempts = 5;    //5 Times try
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
+
             }).AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders()
                 .AddTokenProvider<CustomEmailConfirmationTokenProvider
