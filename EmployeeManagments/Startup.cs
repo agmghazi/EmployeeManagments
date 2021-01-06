@@ -111,6 +111,9 @@ namespace EmployeeManagments
             // Register the second handler
             services.AddSingleton<IAuthorizationHandler, SuperAdminHandler>();
 
+            //for encrypt id param 
+            services.AddSingleton<DataProtectionPurposeStrings>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
