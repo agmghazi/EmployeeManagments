@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace EmployeeManagments
 {
@@ -25,6 +26,21 @@ namespace EmployeeManagments
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddAuthentication()
+                .AddGoogle(options =>
+            {
+                options.ClientId = "XXXXX";
+                options.ClientSecret = "YYYYY";
+            })
+            .AddFacebook(options =>
+            {
+                options.AppId = "XXXXX";
+                options.AppSecret = "YYYYY";
+            });
+
+
+
             services.ConfigureApplicationCookie(options =>
             {
                 options.AccessDeniedPath = new PathString("/Administraion/AccessDenied");
@@ -61,7 +77,22 @@ namespace EmployeeManagments
                 //overwrite register model
                 options.Password.RequiredLength = 10;
                 options.Password.RequiredUniqueChars = 3;
-            }).AddEntityFrameworkStores<AppDbContext>();
+                options.SignIn.RequireConfirmedEmail = true;
+                options.Tokens.EmailConfirmationTokenProvider = "CustomEmailConfirmation";
+
+            }).AddEntityFrameworkStores<AppDbContext>()
+                .AddDefaultTokenProviders()
+                .AddTokenProvider<CustomEmailConfirmationTokenProvider
+                    <ApplicationUser>>("CustomEmailConfirmation");
+
+            // Changes token lifespan of all token types
+            services.Configure<DataProtectionTokenProviderOptions>(o =>
+                o.TokenLifespan = TimeSpan.FromHours(5));   //5 hours
+
+            // Changes token lifespan of just the Email Confirmation Token type
+            services.Configure<CustomEmailConfirmationTokenProviderOptions>(o =>
+                o.TokenLifespan = TimeSpan.FromDays(3));  //3 days
+
 
             services.AddMvc(options =>
             {

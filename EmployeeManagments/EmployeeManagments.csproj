@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Views\Account\ConfirmEmail.cshtml" />
     <Content Remove="Views\Account\Login.cshtml" />
   </ItemGroup>
 
@@ -26,11 +27,17 @@
   </ItemGroup>
 
   <ItemGroup>
+    <_ContentIncludedByDefault Remove="Views\Account\ConfirmEmail.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Account\Login.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Views\Account\ConfirmEmail.cshtml" />
     <None Include="Views\Account\Login.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\Account\ConfirmEmail.cshtml" />
   </ItemGroup>
 
 </Project>
