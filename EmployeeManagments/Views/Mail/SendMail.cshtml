@@ -1,0 +1,112 @@
+﻿@model EmailModel
+
+<div class="row">
+    <div class="col-md-12">
+        <form enctype="multipart/form-data" method="post">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="To"></label>
+                <input asp-for="To" class="form-control" />
+                <span asp-validation-for="To"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="CC"></label>
+                <input asp-for="CC" class="form-control" />
+                <span asp-validation-for="CC"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Subject"></label>
+                <input asp-for="Subject" class="form-control" />
+                <span asp-validation-for="Subject"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Body"></label>
+                <textarea id="summernote" asp-for="Body" class="form-control"></textarea>
+                <span asp-validation-for="Body"></span>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="Attachment" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <div class="custom-file">
+                        <input multiple asp-for="Attachment" class="form-control custom-file-input" />
+                        <label class="custom-file-label">Choose File....</label>
+                    </div>
+                    <span asp-validation-for="Attachment" class="text-danger"></span>
+                </div>
+            </div>
+
+            <dnt-captcha asp-captcha-generator-max="999999"
+                         asp-captcha-generator-min="111111"
+                         asp-captcha-generator-language="English"
+                         asp-captcha-generator-display-mode="ShowDigits"
+                         asp-use-relative-urls="true"
+                         asp-placeholder="Enter Captcha"
+                         asp-validation-error-message="Please enter the security code."
+                         asp-font-name="Tahoma"
+                         asp-font-size="20"
+                         asp-fore-color="#333333"
+                         asp-back-color="#ccc"
+                         asp-text-box-class="text-box form-control w-25"
+                         asp-text-box-template="<span class='input-group-prepend'><span class='form-group-text '></span></span>{0}"
+                         asp-validation-message-class="text-danger"
+                         asp-refresh-button-class="fas fa-redo btn-sm "
+                         asp-use-noise="false" />
+            <br />
+            <button type="submit" class="btn btn-primary" style="width: auto">Send mail</button>
+
+            @section Scripts{
+                <script>
+                    $(document).ready(function () {
+                        $(".custom-file-input").on("change",
+                            function () {
+                                var fileLabel = $(this).next(".custom-file-label");
+                                var files = $(this)[0].files;
+                                if (files.length > 1) {
+                                    fileLabel.html(files.length + "files selected");
+                                }
+                                if (files.length == 1) {
+                                    fileLabel.html(files[0].name);
+                                }
+                            });
+                    });
+
+                    $('#summernote').summernote({
+                        placeholder: 'Hello stand alone ui',
+                        tabsize: 2,
+                        height: 120,
+                        toolbar: [
+                            ['style', ['style']],
+                            ['font', ['bold', 'underline', 'clear']],
+                            ['color', ['color']],
+                            ['para', ['ul', 'ol', 'paragraph']],
+                            ['table', ['table']],
+                            ['insert', ['link', 'picture', 'video']],
+                            ['view', ['fullscreen', 'codeview', 'help']]
+                        ]
+                    });
+
+                    $("#alertmsg").fadeTo(2000, 500).slideUp(1000, function () {
+                        $("#alertmsg").hide();
+                    });
+
+
+                </script>
+
+            }
+        </form>
+    </div>
+</div>
+<br />
+@if (Model != null)
+{
+    <div class="alert alert-primary w-25" role="alert" id="alertmsg">
+        @ViewBag.Message
+    </div>
+
+}
+
+

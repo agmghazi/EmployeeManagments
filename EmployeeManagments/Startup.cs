@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using DNTCaptcha.Core;
 
 namespace EmployeeManagments
 {
@@ -26,6 +27,11 @@ namespace EmployeeManagments
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDNTCaptcha(options =>
+                options.UseCookieStorageProvider()
+                    .ShowThousandsSeparators(false)
+            );
+
 
             services.AddAuthentication()
                 .AddGoogle(options =>
@@ -117,6 +123,9 @@ namespace EmployeeManagments
 
             //for encrypt id param 
             services.AddSingleton<DataProtectionPurposeStrings>();
+
+            //setup email address
+
 
         }
 
